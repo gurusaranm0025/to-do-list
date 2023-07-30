@@ -23,6 +23,11 @@ a{
     height: 50px;
     padding-top: 25px;
     margin: 0 10px 0 10px;
+    font-weight: 200;
+}
+
+a:hover{
+    font-weight: 400;
 }
 
 .container-body{
