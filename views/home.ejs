@@ -9,7 +9,20 @@
 <div class="container-body">
   <div class="list-container">
     <ul>
-      <li class="item">
+
+        <% if(locals.todos){ %>
+            <% for(let i = 0; i < todos.length; i++) { %>
+                <li class="item">
+                    <input type="checkbox" name="cb1" id="cb1" class="cb" /><%= todos[i] %>
+                </li>
+            <% } %>
+        <% } %>
+
+
+
+
+
+      <!-- <li class="item">
         <input type="checkbox" name="cb1" id="cb1" class="cb" />List item
       </li>
       <li class="item">
@@ -17,9 +30,9 @@
       </li>
       <li class="item">
         <input type="checkbox" name="cb3" id="cb3" class="cb" />List item
-      </li>
-      <form action="" method="post">
-        <input type="text" name="new-todo" id="new-todo" />
+      </li> -->
+      <form action="/add" method="post">
+        <input type="text" name="newTodo" id="new-todo" />
         <button type="submit" class="add-button">+</button>
       </form>
     </ul>
