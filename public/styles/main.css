@@ -1,0 +1,92 @@
+body {
+    background-color: #FFFFFF;
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+    height: 100vh;
+    font-family: sans-serif;
+    margin: 0;
+}
+
+.navbar{
+    /* display: block; */
+    background-color: #333333;
+    height: 50px;
+    position: relative;
+}
+
+a{
+    text-decoration: none;
+    color: white;
+    margin: 0;
+    vertical-align: middle;
+    height: 50px;
+    padding-top: 25px;
+    margin: 0 10px 0 10px;
+}
+
+.container-body{
+    display: grid;
+    place-items: center;
+    height: 100%;
+}
+
+.list-container{
+    background-color: #E1F4F3;
+    padding: 20px 20px 0 20px;
+    width: 500px;
+    min-height: fit-content;
+    border: 1px solid #333333;
+    border-radius: 15px;
+}
+
+ul{
+    list-style: none;
+    padding-left: 0;
+    width: 500px;
+    /* text-align: center; */
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+li{
+    margin-top: 15px;
+    margin-left: 20px;
+}
+
+.cb{
+    margin: auto 15px auto 0;
+    outline: none;
+}
+
+#new-todo{
+    margin: 30px auto 10px 2px;
+    height: 35px;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    width: 435px;
+    background: #706C61;
+    padding: 0 10px;
+    color: white;
+}
+
+#new-todo:hover,.add-button:hover{
+    background-color: #333333;
+}
+
+#new-todo:focus{
+    background-color: #333333;    
+}
+
+
+.add-button{
+    width: 35px;
+    height: 35px;
+    background-color: #706C61;
+    outline: none;
+    border: none;
+    border-radius: 100%;
+    font-size: 1rem;
+    color: white;
+}
