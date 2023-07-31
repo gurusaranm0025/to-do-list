@@ -1,5 +1,35 @@
 import express from "express";
 import bodyParser from "body-parser";
+const mongoose = require("mongoose");
+
+mongoose.connection("mongodb://localhost:27017/todolistDB");
+
+const itemsSchema = new mongoose.Schema({
+    name: String
+});
+
+const Item = new mongoose.model("Item", itemsSchema);
+
+const item1 = new Item ({
+    name: "Welcome to the todolist!"
+});
+
+const item2 = new Item ({
+    name:"Hit the + buton add a to-do to the list"
+});
+
+const item3 = new Item ({
+    name: "<---Hit this to delete the item."
+});
+
+const defaultItems = [item1,item2,item3];
+
+Item.insertMany(defaultItems).then(function() {
+    console.log("Default data is successfully inserted.");
+}).catch(function(err) {
+    console.log(err);
+});
+
 
 const app = express();
 const port = 6002;
