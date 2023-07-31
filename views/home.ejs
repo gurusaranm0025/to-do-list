@@ -12,7 +12,9 @@
         <% if(locals.todos){ %>
           <% todos.forEach(function(todo){ %>
             <li class="item">
-              <input type="checkbox" name="cb1" id="cb1" class="cb" /><span><%= todo.name %></span>
+              <form action="/delete" method="post">
+                <input type="checkbox" onchange="this.form.submit()" value="<%= todo._id %>" name="cb" id="cb" class="cb" /><span><%= todo.name %></span>
+              </form>
             </li>
           <% }) %>
         <% } %>

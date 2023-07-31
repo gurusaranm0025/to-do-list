@@ -67,9 +67,21 @@ app.get("/work", (req, res) => {
 });
 
 app.post("/add", (req, res) => {
-  console.log("post recieved", req.body.newTodo);
-  todolist.push(req.body.newTodo);
+  const itemName = req.body.newTodo;
+  const item = new Item({
+    name: itemName
+  });
+  item.save();
+
   res.redirect("/");
+});
+
+app.post("/delete", (req, res) => {
+  const checkedItemID = req.body.cb;
+
+  Item.deleteOne({_id: checkedItemID}).then(
+    res.redirect("/")
+  );
 });
 
 app.post("/work", (req, res) => {
