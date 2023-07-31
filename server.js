@@ -28,6 +28,13 @@ const item3 = new Item({
 
 const defaultItems = [item1, item2, item3];
 
+const listSchema = new mongoose.Schema({
+  name: String,
+  items: [itemsSchema]
+});
+
+const List = new mongoose.model("List", listSchema);
+
 // Code to add deafult items to mongoDB
 
 const app = express();
@@ -62,9 +69,31 @@ app.get("/", (req, res) => {
     });
 });
 
-app.get("/work", (req, res) => {
-  res.render("home.ejs", { todos: workTodoList, toPersonal: false });
+app.get("/:customListName", (req, res) => {
+  const custListName = req.params.customListName;
+
+  const list = new List({
+    name: custListName,
+    items: defaultItems,
+  });
+
+  List.findOne({name:custListName}).then(function(foundList){
+    if (!foundList) {
+      list.save();
+      res.redirect(`/${custListName}`);
+    } else {
+      res.render("home.ejs", {todos: foundList.items, toPersonal:true});
+    }
+  })
+
+
+
+  // list.save();
 });
+
+// app.get("/work", (req, res) => {
+//   res.render("home.ejs", { todos: workTodoList, toPersonal: false });
+// });
 
 app.post("/add", (req, res) => {
   const itemName = req.body.newTodo;
@@ -80,15 +109,18 @@ app.post("/delete", (req, res) => {
   const checkedItemID = req.body.cb;
 
   Item.deleteOne({_id: checkedItemID}).then(
-    res.redirect("/")
-  );
+    function() {
+      res.redirect("/");;
+    }).catch(function(error) {
+    console.log(error);
+  });
 });
 
-app.post("/work", (req, res) => {
-  console.log("post recieved to work list", req.body.newTodo);
-  workTodoList.push(req.body.newTodo);
-  res.redirect("/work");
-});
+// app.post("/work", (req, res) => {
+//   console.log("post recieved to work list", req.body.newTodo);
+//   workTodoList.push(req.body.newTodo);
+//   res.redirect("/work");
+// });
 
 app.listen(port, () => {
   console.log(`Server is successfully running on port ${port}`);
