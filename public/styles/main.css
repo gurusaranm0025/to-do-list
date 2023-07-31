@@ -60,6 +60,10 @@ li{
     margin-left: 20px;
 }
 
+input[type=checkbox]:checked + span {
+    text-decoration: line-through;
+}
+
 .cb{
     margin: auto 15px auto 0;
     outline: none;
