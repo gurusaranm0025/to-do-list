@@ -30,7 +30,7 @@ const defaultItems = [item1, item2, item3];
 
 const listSchema = new mongoose.Schema({
   name: String,
-  items: [itemsSchema]
+  items: [itemsSchema],
 });
 
 const List = new mongoose.model("List", listSchema);
@@ -42,8 +42,8 @@ const port = 6002;
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-var todolist = [];
-var workTodoList = [];
+// var todolist = [];
+// var workTodoList = [];
 
 app.get("/", (req, res) => {
   Item.find({})
@@ -60,7 +60,7 @@ app.get("/", (req, res) => {
       } else {
         res.render("home.ejs", {
           todos: items,
-          toPersonal: true,
+          list: "root",
         });
       }
     })
@@ -77,16 +77,14 @@ app.get("/:customListName", (req, res) => {
     items: defaultItems,
   });
 
-  List.findOne({name:custListName}).then(function(foundList){
+  List.findOne({ name: custListName }).then(function (foundList) {
     if (!foundList) {
       list.save();
       res.redirect(`/${custListName}`);
     } else {
-      res.render("home.ejs", {todos: foundList.items, toPersonal:true});
+      res.render("home.ejs", { todos: foundList.items, list: custListName });
     }
-  })
-
-
+  });
 
   // list.save();
 });
@@ -97,23 +95,38 @@ app.get("/:customListName", (req, res) => {
 
 app.post("/add", (req, res) => {
   const itemName = req.body.newTodo;
+  const listName = req.body.list;
+  // console.log(listName);
   const item = new Item({
-    name: itemName
+    name: itemName,
   });
-  item.save();
 
-  res.redirect("/");
+  if (listName === "root") {
+    item.save();
+    res.redirect("/");
+  } else {
+    List.findOne({ name: listName })
+      .then(function (foundList) {
+        foundList.items.push(item);
+        foundList.save();
+        res.redirect("/" + listName);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 });
 
 app.post("/delete", (req, res) => {
   const checkedItemID = req.body.cb;
 
-  Item.deleteOne({_id: checkedItemID}).then(
-    function() {
-      res.redirect("/");;
-    }).catch(function(error) {
-    console.log(error);
-  });
+  Item.deleteOne({ _id: checkedItemID })
+    .then(function () {
+      res.redirect("/");
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
 });
 
 // app.post("/work", (req, res) => {

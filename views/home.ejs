@@ -18,13 +18,9 @@
             </li>
           <% }) %>
         <% } %>
-        <% if (toPersonal) { %>
             <form action="/add" method="post">
-        <% } else { %>
-            <form action="/work" method="post">
-        <% } %>
                 <input type="text" name="newTodo" id="new-todo" />
-                <button type="submit" class="add-button">+</button>
+                <button type="submit" name="list" value="<%= list %>" class="add-button">+</button>
             </form>
     </ul>
   </div>
