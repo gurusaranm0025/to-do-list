@@ -153,6 +153,6 @@ app.post("/delete", (req, res) => {
 //   res.redirect("/work");
 // });
 
-app.listen(port, () => {
+app.listen( process.env.port || port, () => {
   console.log(`Server is successfully running on port ${port}`);
 });
