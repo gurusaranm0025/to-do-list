@@ -1,12 +1,16 @@
 import express from "express";
 import bodyParser from "body-parser";
+import _ from "lodash";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const mongoose = require("mongoose");
 
-mongoose.connect("mongodb://localhost:27017/todolistDB", {
-  useNewUrlParser: true,
-});
+mongoose.connect(
+  "mongodb+srv://gurusaranm0025:prasad0027@cluster0.afdwdgy.mongodb.net/todolistDB",
+  {
+    useNewUrlParser: true,
+  }
+);
 
 const itemsSchema = new mongoose.Schema({
   name: String,
@@ -70,7 +74,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/:customListName", (req, res) => {
-  const custListName = req.params.customListName;
+  const custListName = _.capitalize(req.params.customListName);
 
   const list = new List({
     name: custListName,
@@ -119,14 +123,28 @@ app.post("/add", (req, res) => {
 
 app.post("/delete", (req, res) => {
   const checkedItemID = req.body.cb;
+  const listName = req.body.list;
 
-  Item.deleteOne({ _id: checkedItemID })
-    .then(function () {
-      res.redirect("/");
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  if (listName === "root") {
+    Item.deleteOne({ _id: checkedItemID })
+      .then(function () {
+        res.redirect("/");
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  } else {
+    List.findOneAndUpdate(
+      { name: listName },
+      { $pull: { items: { _id: checkedItemID } } }
+    )
+      .then(function (foundList) {
+        res.redirect("/" + listName);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 });
 
 // app.post("/work", (req, res) => {
